@@ -1,0 +1,31 @@
+name: Check
+
+# Version branches only, such as v2026.1.0: pull requests into one, and commits to one.
+on:
+  pull_request:
+    branches: ['v*']
+  push:
+    branches: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # 8 as well as 10: the library targets both.
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - run: dotnet tool restore
+      # The generated code must be exactly what the committed type model generates.
+      - name: Generated code is up to date
+        run: dotnet coho-codegen check
+      - run: dotnet restore
+      - run: dotnet format --verify-no-changes --no-restore
+      - run: dotnet build --no-restore -c Release
+      - run: dotnet test --no-build -c Release

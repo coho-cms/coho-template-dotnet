@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Coho CMS",
+  "classifications": ["Library", "Coho", "CMS"],
+  "identity": "CohoCms.Templates.Library",
+  "name": "Coho content library",
+  "description": "A typed content library, generated from your Coho CMS project's content types, that your sites and services reference.",
+  "shortName": "coho-library",
+  "sourceName": "YourOrg.Content",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [".env", "coho-ir.json.tmp", "**/bin/**", "**/obj/**", ".idea/**", ".vs/**"]
+        }
+      ]
+    }
+  ],
+  "postActions": [
+    {
+      "description": "Point the library at your Coho project",
+      "manualInstructions": [
+        {
+          "text": "Next: cd into the library, then run `dotnet tool restore`, `dotnet coho-codegen init`, `dotnet coho-codegen pull` and `dotnet coho-codegen generate`."
+        }
+      ],
+      "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
+      "continueOnError": true
+    }
+  ]
+}

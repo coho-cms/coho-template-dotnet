@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <Description>Typed content for our sites and services, generated from Coho CMS.</Description>
+    <Version>0.1.0</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--
+      Nothing is packed, so nothing is published by accident, until you choose where it is
+      published: see the README. Then remove this.
+    -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CohoCms.Delivery" />
+  </ItemGroup>
+</Project>

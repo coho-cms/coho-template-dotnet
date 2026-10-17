@@ -55,3 +55,8 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Coho: a developer's own token, and a pull that did not finish.
+.env
+coho-ir.json.tmp
+.idea/

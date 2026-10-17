@@ -1,0 +1,52 @@
+name: Release
+
+# Builds the library from a Coho tag and publishes it. Run it by hand once the tag is cut,
+# naming the tag and the package version to publish.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: The Coho tag to build from, such as v1.4.0
+        required: true
+      version:
+        description: The package version to publish, such as 1.4.0
+        required: true
+
+permissions:
+  contents: read
+  # GitHub Packages needs this to publish. Remove it for any other registry.
+  packages: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - run: dotnet tool restore
+      # Inputs reach the shell as variables, never pasted into the script, so a crafted tag
+      # name cannot run commands.
+      - name: Pull the type model for the tag
+        run: dotnet coho-codegen pull --ref "$REF"
+        env:
+          REF: ${{ inputs.ref }}
+          COHO_TOKEN: ${{ secrets.COHO_TOKEN }}
+      - run: dotnet coho-codegen generate
+      - run: dotnet build -c Release -p:Version="$VERSION"
+        env:
+          VERSION: ${{ inputs.version }}
+      - run: dotnet test --no-build -c Release
+      # Packs nothing while the library's IsPackable is false; see the README.
+      - run: dotnet pack --no-build -c Release -p:Version="$VERSION" -o artifacts
+        env:
+          VERSION: ${{ inputs.version }}
+      # Where your packages are published: GitHub Packages, under this repository's owner.
+      - name: Publish
+        run: dotnet nuget push "artifacts/*.nupkg" --source "https://nuget.pkg.github.com/$OWNER/index.json" --api-key "$TOKEN"
+        env:
+          OWNER: ${{ github.repository_owner }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}

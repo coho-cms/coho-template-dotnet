@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- A development tool, not part of the library: it is never packed or published. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/YourOrg.Content/YourOrg.Content.csproj" />
+  </ItemGroup>
+
+  <!-- Here rather than in the code, where its place among the usings would depend on the library's name. -->
+  <ItemGroup>
+    <Using Include="YourOrg.Content" />
+  </ItemGroup>
+</Project>

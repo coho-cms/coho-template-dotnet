@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "cohocms.codegen": {
+      "version": "0.1.0-alpha.1",
+      "commands": [
+        "coho-codegen"
+      ],
+      "rollForward": false
+    }
+  }
+}
