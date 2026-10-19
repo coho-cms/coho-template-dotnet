@@ -11,7 +11,7 @@ It is a skeleton. `coho-ir.json` is an empty placeholder type model, and `src/Yo
 1. **Create the library** with `dotnet new`, which names it for you:
 
    ```bash
-   dotnet new install CohoCms.Templates::0.1.0-alpha.1
+   dotnet new install CohoCms.Templates::0.1.0-alpha.3
    dotnet new coho-library -n Acme.Content
    cd Acme.Content
    ```
@@ -116,6 +116,8 @@ COHO_LOCALE=en-US
 ```
 
 Without a host, pass a config to `new Coho(...)` instead, or build one from the environment with `CohoEnvironment.FromEnvironment()`, from `CohoCms.Delivery`.
+
+To show asset fields in Razor Pages, MVC views or Blazor, add [`CohoCms.Razor`](https://github.com/coho-cms/coho-razor): `<coho-image src="@post.Hero" width="800" />` renders an image resized at the edge, and `<coho-asset-link asset="@post.Brochure" />` a link to download a file.
 
 ### Previews
 

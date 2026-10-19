@@ -7,7 +7,7 @@
       The Coho runtime the generated code calls. A library's reference is a minimum, so an
       app that also uses CohoCms.Delivery untyped gets one copy, at the newer version.
     -->
-    <PackageVersion Include="CohoCms.Delivery" Version="0.1.0-alpha.1" />
+    <PackageVersion Include="CohoCms.Delivery" Version="0.1.0-alpha.3" />
 
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
   </ItemGroup>
