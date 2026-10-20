@@ -2,8 +2,6 @@
 
 The starting point for your content library: a .NET library, generated from your Coho CMS project's content types, that your sites and services reference. Each content type becomes a record in its own file, and the library's client returns them.
 
-**In testing.** The `CohoCms` packages this depends on are alphas on NuGet.
-
 It is a skeleton. `coho-ir.json` is an empty placeholder type model, and `src/YourOrg.Content/Coho/Coho.cs` is what it generates: no content types, only the untyped reads, so the template builds as it stands. Generating yours in step 4 replaces both, with your project's type model and a file per content type.
 
 ## Set up
@@ -11,7 +9,7 @@ It is a skeleton. `coho-ir.json` is an empty placeholder type model, and `src/Yo
 1. **Create the library** with `dotnet new`, which names it for you:
 
    ```bash
-   dotnet new install CohoCms.Templates@0.1.0-alpha.3
+   dotnet new install CohoCms.Templates
    dotnet new coho-library -n Acme.Content
    cd Acme.Content
    ```
