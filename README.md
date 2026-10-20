@@ -11,7 +11,7 @@ It is a skeleton. `coho-ir.json` is an empty placeholder type model, and `src/Yo
 1. **Create the library** with `dotnet new`, which names it for you:
 
    ```bash
-   dotnet new install CohoCms.Templates::0.1.0-alpha.3
+   dotnet new install CohoCms.Templates@0.1.0-alpha.3
    dotnet new coho-library -n Acme.Content
    cd Acme.Content
    ```
