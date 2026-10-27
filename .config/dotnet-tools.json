@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "cohocms.codegen": {
-      "version": "2026.2.0-alpha.1",
+      "version": "2026.2.0-alpha.2",
       "commands": [
         "coho-codegen"
       ],
