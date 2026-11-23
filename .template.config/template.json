@@ -26,7 +26,7 @@
       "description": "Point the library at your Coho project",
       "manualInstructions": [
         {
-          "text": "Next: cd into the library, then run `dotnet tool restore`, `dotnet coho-codegen init`, `dotnet coho-codegen pull` and `dotnet coho-codegen generate`."
+          "text": "Next: cd into the library, then run `dotnet tool restore`, `dotnet coho-codegen init` and `dotnet coho-codegen pull`, and build: building generates the code."
         }
       ],
       "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",

@@ -1,0 +1,96 @@
+{
+  // Coho's steps as VS Code tasks: Terminal > Run Task, or Tasks: Run Task in the Command
+  // Palette. Each runs dotnet directly, not through a shell, so they work the same in
+  // PowerShell, Command Prompt, bash and zsh. Building generates the code too, from
+  // coho-ir.json, so after a pull a build is all it takes; these tasks generate straight
+  // away, so the editor sees the new types without one.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Coho: pull the content types",
+      "detail": "Fetch the types from the ref in coho.config.json, then generate the library's code",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["coho-codegen", "generate"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOrder": "sequence",
+      "dependsOn": ["coho: restore", "coho: pull"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Coho: pull the content types from another ref",
+      "detail": "Fetch the types from a branch or tag you name, then generate the library's code",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["coho-codegen", "generate"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOrder": "sequence",
+      "dependsOn": ["coho: restore", "coho: pull a ref"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Coho: generate the code",
+      "detail": "Write Coho/ again from the coho-ir.json you have, without asking Coho",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["coho-codegen", "generate"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": ["coho: restore"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Coho: check the generated code",
+      "detail": "Fail if Coho/ differs from what coho-ir.json generates, as CI checks",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["coho-codegen", "check"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": ["coho: restore"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Coho: list the content",
+      "detail": "Count the entries of each type on the ref in coho.config.json, live through Coho",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["run", "--project", "tools/Catalog", "--", "--preview"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "coho: restore",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["tool", "restore"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "silent" },
+      "problemMatcher": [],
+      "hide": true
+    },
+    {
+      "label": "coho: pull",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["coho-codegen", "pull"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "hide": true
+    },
+    {
+      "label": "coho: pull a ref",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["coho-codegen", "pull", "--ref", "${input:cohoRef}"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "hide": true
+    }
+  ],
+  "inputs": [
+    {
+      "id": "cohoRef",
+      "type": "promptString",
+      "description": "The branch or tag to pull the content types from, such as feature/spring-update or v1.4.0"
+    }
+  ]
+}

@@ -30,9 +30,10 @@ It is a skeleton. `coho-ir.json` is an empty placeholder type model, and `src/Yo
 
    ```bash
    dotnet coho-codegen pull
-   dotnet coho-codegen generate
    dotnet build
    ```
+
+   Building generates the code: `coho-codegen.targets`, which the library's project imports, runs `dotnet coho-codegen generate` whenever `coho-ir.json`, `coho.config.json` or the tool's version has changed. It reads nothing from Coho, so it needs no token and works offline. `dotnet coho-codegen generate` does the same by itself, without a build.
 
 4. **Choose where it is published.** The release workflow publishes to GitHub Packages; change the `--source` in `.github/workflows/release.yml` for another registry. Then remove `<IsPackable>false</IsPackable>` from the library's project file, which is there so nothing is published by accident.
 
@@ -77,7 +78,7 @@ Cut a tag in Coho, then:
 
 ```bash
 dotnet coho-codegen pull --ref v1.4.0
-dotnet coho-codegen generate
+dotnet build
 ```
 
 Review and commit the diff. CI's `check` fails whenever the generated code doesn't match the committed type model.
@@ -85,6 +86,20 @@ Review and commit the diff. CI's `check` fails whenever the generated code doesn
 To release, run the **Release** workflow with the Coho tag and the version to publish. It pulls that tag's types, generates, tests and publishes.
 
 Your own reads go in `src/YourOrg.Content/CohoReads.cs`, built on the generated ones. `Coho/` is regenerated and never edited, so a schema change that breaks one of your reads fails this library's build, not an app.
+
+## In VS Code
+
+The library comes with VS Code tasks for each step, in `.vscode/tasks.json`. Run them with **Terminal > Run Task**, or **Tasks: Run Task** in the Command Palette:
+
+| Task | What it does |
+|---|---|
+| Coho: pull the content types | Fetches the types from the ref in `coho.config.json`, and generates the code |
+| Coho: pull the content types from another ref | The same, from a branch or tag it asks for |
+| Coho: generate the code | Writes `Coho/` again from the `coho-ir.json` you have, without asking Coho |
+| Coho: check the generated code | Fails if `Coho/` differs from what `coho-ir.json` generates, as CI checks |
+| Coho: list the content | Counts the entries of each type, live through Coho, as `--preview` below |
+
+Each runs `dotnet` directly, not through a shell, so they work the same on Windows, macOS and Linux. The pull tasks generate straight away, so the editor sees the new types without a build. VS Code suggests the C# Dev Kit when the folder opens; in Visual Studio or Rider, building generates the code in the same way, and a pull is `dotnet coho-codegen pull` in the terminal.
 
 ## Using the library in an app
 

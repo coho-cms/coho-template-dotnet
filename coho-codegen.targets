@@ -1,0 +1,46 @@
+<Project>
+  <!--
+    Generates the library's code when it builds, from the type model in coho-ir.json: after a
+    pull, or a checkout that changes the type model, building is all it takes. It runs only when
+    coho-ir.json, coho.config.json or the tool's version has changed since it last ran, and reads
+    nothing from Coho, so it needs no token and works offline. Pulling stays a step you choose.
+
+    Set CohoGenerateOnBuild to false to build only what is committed. CI runs coho-codegen check
+    before it builds, so a type model committed without its code still fails there.
+  -->
+  <PropertyGroup>
+    <CohoGenerateOnBuild Condition="'$(CohoGenerateOnBuild)' == ''">true</CohoGenerateOnBuild>
+    <CohoLibraryRoot>$(MSBuildThisFileDirectory)</CohoLibraryRoot>
+    <CohoGeneratedDir Condition="'$(CohoGeneratedDir)' == ''">Coho/</CohoGeneratedDir>
+    <CohoGenerateStamp>$(BaseIntermediateOutputPath)coho-codegen.stamp</CohoGenerateStamp>
+    <!-- The dotnet that runs this build, when it says; Visual Studio does not, so the one on PATH. -->
+    <CohoDotnet Condition="'$(DOTNET_HOST_PATH)' != ''">"$(DOTNET_HOST_PATH)"</CohoDotnet>
+    <CohoDotnet Condition="'$(DOTNET_HOST_PATH)' == ''">dotnet</CohoDotnet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <CohoGenerateInput Include="$(CohoLibraryRoot)coho-ir.json;$(CohoLibraryRoot)coho.config.json;$(CohoLibraryRoot).config/dotnet-tools.json" />
+    <!-- So Visual Studio builds again after a pull, rather than deciding nothing changed. -->
+    <UpToDateCheckInput Include="@(CohoGenerateInput)" />
+  </ItemGroup>
+
+  <!--
+    Each target framework's build runs this, at the same time; coho-codegen takes turns with a
+    lock, so the second finds the code up to date and writes nothing.
+  -->
+  <Target Name="CohoGenerate"
+          BeforeTargets="BeforeBuild"
+          Condition="'$(CohoGenerateOnBuild)' == 'true' and '$(DesignTimeBuild)' != 'true'"
+          Inputs="@(CohoGenerateInput)"
+          Outputs="$(CohoGenerateStamp)">
+    <Exec Command="$(CohoDotnet) tool restore" WorkingDirectory="$(CohoLibraryRoot)" StandardOutputImportance="low" />
+    <Exec Command="$(CohoDotnet) coho-codegen generate" WorkingDirectory="$(CohoLibraryRoot)" StandardOutputImportance="normal" />
+    <Touch Files="$(CohoGenerateStamp)" AlwaysCreate="true" />
+
+    <!-- The project's files were listed before this ran: list Coho/ again, for a type added or removed. -->
+    <ItemGroup>
+      <Compile Remove="$(CohoGeneratedDir)*.cs" />
+      <Compile Include="$(CohoGeneratedDir)*.cs" />
+    </ItemGroup>
+  </Target>
+</Project>

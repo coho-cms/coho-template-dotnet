@@ -1,0 +1,4 @@
+{
+  // C# Dev Kit: IntelliSense, building and tests for the library in VS Code.
+  "recommendations": ["ms-dotnettools.csdevkit"]
+}

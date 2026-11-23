@@ -56,7 +56,8 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 
-# Coho: a developer's own token, and a pull that did not finish.
+# Coho: a developer's own token, a pull that did not finish, and a generate under way.
 .env
 coho-ir.json.tmp
+.coho-codegen.lock
 .idea/

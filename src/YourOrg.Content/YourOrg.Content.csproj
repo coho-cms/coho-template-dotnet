@@ -14,4 +14,7 @@
   <ItemGroup>
     <PackageReference Include="CohoCms.Delivery" />
   </ItemGroup>
+
+  <!-- Coho/ is generated from coho-ir.json as the library builds: see the file for how. -->
+  <Import Project="../../coho-codegen.targets" />
 </Project>
