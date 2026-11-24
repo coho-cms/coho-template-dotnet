@@ -2,10 +2,31 @@
   // Coho's steps as VS Code tasks: Terminal > Run Task, or Tasks: Run Task in the Command
   // Palette. Each runs dotnet directly, not through a shell, so they work the same in
   // PowerShell, Command Prompt, bash and zsh. Building generates the code too, from
-  // coho-ir.json, so after a pull a build is all it takes; these tasks generate straight
-  // away, so the editor sees the new types without one.
+  // coho-ir.json, so after a pull a build is all it takes; the pull tasks generate straight
+  // away, so the editor sees the new types without one. Ctrl+Shift+B builds, and pulls nothing.
   "version": "2.0.0",
   "tasks": [
+    {
+      "label": "Coho: pull and build",
+      "detail": "Fetch the types from the ref in coho.config.json, then build: the build generates the code",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOrder": "sequence",
+      "dependsOn": ["coho: restore", "coho: pull"],
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "Coho: build",
+      "detail": "Build the library, generating its code first when coho-ir.json has changed. Pulls nothing",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": "$msCompile"
+    },
     {
       "label": "Coho: pull the content types",
       "detail": "Fetch the types from the ref in coho.config.json, then generate the library's code",

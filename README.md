@@ -93,13 +93,15 @@ The library comes with VS Code tasks for each step, in `.vscode/tasks.json`. Run
 
 | Task | What it does |
 |---|---|
+| Coho: pull and build | Fetches the types from the ref in `coho.config.json`, then builds, which generates the code |
+| Coho: build | Builds, generating the code first if `coho-ir.json` changed. **Ctrl+Shift+B** runs it, and it pulls nothing |
 | Coho: pull the content types | Fetches the types from the ref in `coho.config.json`, and generates the code |
 | Coho: pull the content types from another ref | The same, from a branch or tag it asks for |
 | Coho: generate the code | Writes `Coho/` again from the `coho-ir.json` you have, without asking Coho |
 | Coho: check the generated code | Fails if `Coho/` differs from what `coho-ir.json` generates, as CI checks |
 | Coho: list the content | Counts the entries of each type, live through Coho, as `--preview` below |
 
-Each runs `dotnet` directly, not through a shell, so they work the same on Windows, macOS and Linux. The pull tasks generate straight away, so the editor sees the new types without a build. VS Code suggests the C# Dev Kit when the folder opens; in Visual Studio or Rider, building generates the code in the same way, and a pull is `dotnet coho-codegen pull` in the terminal.
+Each runs `dotnet` directly, not through a shell, so they work the same on Windows, macOS and Linux. The pull tasks other than **pull and build** generate straight away, so the editor sees the new types without a build. VS Code suggests the C# Dev Kit when the folder opens; in Visual Studio or Rider, building generates the code in the same way, and a pull is `dotnet coho-codegen pull` in the terminal.
 
 ## Using the library in an app
 
